@@ -1,0 +1,17 @@
+{% extends 'chat1/cbase.html'%}
+{% block content%}
+    <div class="container">
+        <form  method="POST" action="/">
+            <label><b>Username:</b></label> 
+            <input type="text" name="name" class="style1"   placeholder="Enter name here" value={{name}}><br>
+           &nbsp;&nbsp;&nbsp; <input type="text" name="code" class="style1"  placeholder="Enter room code to join" value={{code}}>&nbsp;&nbsp;
+            <button type="submit" name="join" id="join">Join a Room</button><br><br>
+        <hr/>
+            <button type="submit" name="create" id="create">Create a Room</button>
+         {% if error %}
+            <p id="error">{{error}}</p>
+        {% endif %}
+        </form>
+        
+    </div>
+    {% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'chat1/cbase.html'%}
+{% block content %}
+<div class="box-container">
+    <h2 id="home-header"><b style="color:white;background-color: brown;padding:3px;">{{user}}</b> - chat room</h2>
+    <div id="room-subsection">
+            <h2 id="room-code-display">Room Code : <b style="color:white;background-color: brown;padding:3px;">{{room}}</b></h2>
+            <a href="/" id="leave-chat-btn">Leave the Chat</a>
+    </div>
+    <hr/>
+    <div id="chat-room-widget">
+        <div class="message_container" >
+            <ul id="messages"></ul>
+        </div>
+        <div id="message-box">
+           <input type="text"  name="message" id="message_input" placeholder="Type a message here">
+           <button  type="submit"  onclick="sendMessage()" id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const socket=io();
+
+            socket.on("message",function(message){
+               createChatItem(message.message,message.sender);
+            });
+
+            function createChatItem(message,sender){
+                var messages=document.getElementById("messages");
+                if(sender===""){
+                    content=`<p class="member-activity">${message}</p>`;
+                }
+                else{
+                    var senderIsUser = "{{user}}" === sender;
+                    var content=`<li class="message-item ${senderIsUser ? "self-message-item" :"recv-message-item"}">
+                                    <p>${message}</p>
+                                    <small class="${senderIsUser ? "muted-text" :"muted-text-white"}">${new Date().toLocaleString()}</small>
+                                 </li>`;
+                }
+                messages.innerHTML+=content;
+            }
+           
+           function sendMessage(){
+               var msgInput=document.getElementById("message_input")
+               if(msgInput.value==="")return;
+               var msg=msgInput.value;
+               socket.emit("message",{data:msg });
+               
+               msgInput.value="";
+           }
+    </script>
+    {% for message in messages %}
+    <script>
+        createChatItem("{{message.message}}","{{message.sender}}");
+    </script>
+    {% endfor %}
+    </div>
+{% endblock%}
