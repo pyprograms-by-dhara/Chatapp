@@ -4,7 +4,7 @@ import random
 from string import ascii_uppercase
 
 app=Flask(__name__)
-app.config['SECREAT_KEY']="DHARA@2411"
+app.config['SECREAT_KEY']="DHARA@3511"
 socketio=SocketIO(app)
 
 
